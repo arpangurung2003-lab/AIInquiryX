@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Blog | AI InquiryX{% endblock %}
+{% block content %}
+{% set fallback_images =
+['https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=1200',
+'https://images.pexels.com/photos/7567444/pexels-photo-7567444.jpeg?auto=compress&cs=tinysrgb&w=1200',
+'https://images.pexels.com/photos/5380642/pexels-photo-5380642.jpeg?auto=compress&cs=tinysrgb&w=1200'] %}
+<section class="page-hero blog-hero">
+    <div class="container"><span class="section-tag">// Blog</span>
+        <h1>Three core articles for smarter inquiry handling.</h1>
+        <p>Focused guides about support workflow, analytics decisions, and secure admin operations.</p>
+    </div>
+</section>
+<section class="section">
+    <div class="container blog-layout blog-layout-pro">
+        <div class="blog-main">
+            {% for article in articles %}
+            <article class="blog-card blog-list-card animate-blog-card">
+                <img class="blog-list-img" src="{{ fallback_images[loop.index0] }}" alt="{{ article.title }}">
+                <div class="blog-list-body">
+                    <div class="blog-meta"><span>{{ article.category }}</span><span>{{ article.read_time }}</span></div>
+                    <h2>{{ article.title }}</h2>
+                    <p>{{ article.summary }}</p>
+                    <a class="card-link" href="{{ url_for('blog_article', slug=article.slug) }}">Read full article →</a>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        <aside class="blog-sidebar refined-blog-sidebar">
+            <div>
+                <h3>Only 3 categories</h3>
+                <p>Support</p>
+                <p>Analytics</p>
+                <p>Security</p>
+            </div>
+            <div>
+                <h3>Purpose</h3>
+                <p>These articles explain the main value of AI InquiryX: better customer support, clearer admin
+                    decisions, and stronger data protection.</p>
+            </div>
+        </aside>
+    </div>
+</section>
+{% endblock %}

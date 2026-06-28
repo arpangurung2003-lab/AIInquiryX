@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Events | AI InquiryX{% endblock %}
+{% block content %}
+{# Fallback images use your own local files in static/images/ so event cards
+   always load (even offline). The Event model has no image column, so
+   admin-created events cycle through these by position. #}
+{% set fallback_images = [
+  'images/gallery-community-event.png',
+  'images/gallery-training-session.png',
+  'images/gallery-helpdesk-collaboration.png',
+  'images/gallery-support-command-center.png',
+  'images/gallery-live-status.png',
+  'images/gallery-performance-review.png',
+  'images/gallery-ticket-submission.png'
+] %}
+<section class="page-hero events-text-hero">
+  <div class="container events-text-hero-inner">
+    <span class="section-tag">// Upcoming Events</span>
+    <h1>Training, demos, and support sessions for better inquiry handling.</h1>
+    <p>Explore product walkthroughs, customer support workshops, admin dashboard training, and AI automation sessions
+      designed for real business teams.</p>
+  </div>
+</section>
+
+{% if events %}
+{% set featured = events[0] %}
+<section class="section">
+  <div class="container event-feature-fixed">
+    <article class="featured-event-card-fixed">
+      <img src="{{ url_for('static', filename=fallback_images[0]) }}" alt="{{ featured.title }}">
+      <div class="featured-event-content-fixed">
+        <span class="section-tag">// Featured Event</span>
+        <h2>{{ featured.title }}</h2>
+        <p>{{ featured.description }}</p>
+        <div class="event-meta-row"><span>{{ featured.event_date.strftime('%d %b %Y') }}</span><span>{{ featured.location }}</span><span>{{ featured.status }}</span></div>
+      </div>
+    </article>
+    <aside class="event-why-fixed">
+      <span class="section-tag">// Why Join</span>
+      <h3>Build a faster support team.</h3>
+      <p>Join practical sessions where admins and support teams learn better inquiry handling, clearer customer
+        communication, stronger service planning, and professional follow-up habits.</p>
+      <div class="why-stat-grid">
+        <div><strong>{{ events|length }}</strong><span>Scheduled sessions</span></div>
+        <div><strong>Live</strong><span>Demo activities</span></div>
+        <div><strong>100%</strong><span>Support-focused topics</span></div>
+        <div><strong>Q&amp;A</strong><span>With every session</span></div>
+      </div>
+    </aside>
+  </div>
+</section>
+<section class="section surface-section">
+  <div class="container">
+    <div class="section-head-left">
+      <div><span class="section-tag">// Event Schedule</span>
+        <h2>Upcoming sessions and product activities.</h2>
+      </div>
+      <p>Every event card shows the date, current status, and venue for each scheduled session.</p>
+    </div>
+    <div class="hotel-events-grid">
+      {% for event in events %}
+      <article class="hotel-event-card">
+        <img src="{{ url_for('static', filename=fallback_images[loop.index0 % (fallback_images | length)]) }}" alt="{{ event.title }}">
+        <div class="hotel-event-body">
+          <div>
+            <div class="event-top-row">
+              <div class="date-box"><b>{{ event.event_date.strftime('%d') }}</b><span>{{ event.event_date.strftime('%b') }}</span></div><span
+                class="badge {{ event.status|lower }}">{{ event.status }}</span>
+            </div>
+            <h3>{{ event.title }}</h3>
+            <p>{{ event.description }}</p>
+          </div>
+          <div class="event-location-badge">{{ event.location }}</div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% else %}
+<section class="section surface-section">
+  <div class="container">
+    <div class="section-head-left">
+      <div><span class="section-tag">// Event Schedule</span>
+        <h2>No events scheduled yet.</h2>
+      </div>
+      <p>Events you add from the admin dashboard will appear here automatically.</p>
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

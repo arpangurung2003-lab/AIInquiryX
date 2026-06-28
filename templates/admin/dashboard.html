@@ -1,0 +1,212 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Dashboard | AI InquiryX{% endblock %}
+{% block page_heading %}Overview{% endblock %}
+{% block content %}
+
+{% set chart_data = chart|default({}, true) %}
+{% set daily_data = daily_stats|default([], true) %}
+{% set recent_data = recent|default([], true) %}
+{% set customer_data = latest_customers|default([], true) %}
+{% set notification_data = latest_notifications|default([], true) %}
+{% set max_daily = max_daily|default(1, true) %}
+
+<section class="modern-dashboard pro-dashboard-panel">
+  <div class="dashboard-top-grid">
+    <div class="dashboard-welcome-card">
+      <span class="admin-kicker">Customer Inquiry Tracking System</span>
+      <h1>Manage customer support from one command center.</h1>
+      <p>Hello {{ current_user.name if current_user.name else 'Admin' }}, review inquiry workload, response quality,
+        customer records, and urgent tickets from a clean dashboard.</p>
+      <div class="dashboard-action-row">
+        <a class="btn btn-primary" href="{{ url_for('admin_inquiries') }}">Review inbox</a>
+        <a class="btn btn-outline" href="{{ url_for('admin_customers') }}">View customers</a>
+        <a class="btn btn-outline" href="{{ url_for('admin_export_excel') }}">Export Excel</a>
+        <a class="btn btn-outline" href="{{ url_for('admin_export_pdf') }}">Export PDF</a>
+      </div>
+    </div>
+  </div>
+
+  <section class="modern-stat-grid">
+    <article class="modern-stat-card primary"><span>Total Inquiries</span><strong class="count-number"
+        data-count="{{ total|default(0, true) }}">0</strong><small>All submitted tickets</small></article>
+    <article class="modern-stat-card"><span>Pending</span><strong class="count-number"
+        data-count="{{ open_tickets|default(0, true) }}">0</strong><small>Pending and under review</small></article>
+    <article class="modern-stat-card"><span>Resolved</span><strong class="count-number"
+        data-count="{{ chart_data.resolved|default(0, true) }}" data-suffix="%">0%</strong><small>Completed ticket
+        share</small></article>
+    <article class="modern-stat-card danger"><span>Urgent</span><strong class="count-number"
+        data-count="{{ escalated|default(0, true) }}">0</strong><small>Needs priority review</small></article>
+  </section>
+
+  <section class="dashboard-main-grid dashboard-management-grid">
+    <article class="modern-panel inquiry-table-panel professional-table-panel">
+      <div class="panel-head">
+        <div>
+          <span class="admin-kicker">Inquiry Management</span>
+          <h2>Recent inquiries</h2>
+        </div>
+        <div class="dashboard-filter-row">
+          <select>
+            <option>Status</option>
+            <option>Pending</option>
+            <option>Under Review</option>
+            <option>Completed</option>
+          </select>
+          <select>
+            <option>Priority</option>
+            <option>Urgent</option>
+            <option>High</option>
+            <option>Normal</option>
+          </select>
+          <input type="date">
+        </div>
+      </div>
+
+      <div class="table-scroll">
+        <table class="modern-admin-table">
+          <thead>
+            <tr>
+              <th>Customer</th>
+              <th>Subject</th>
+              <th>Status</th>
+              <th>Priority</th>
+              <th>Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for inquiry in recent_data[:8] %}
+            <tr>
+              <td>{{ inquiry.customer_name or inquiry.name or 'Customer' }}</td>
+              <td>{{ inquiry.subject or 'Customer inquiry' }}</td>
+              <td><span class="status-chip">{{ inquiry.status or 'Pending' }}</span></td>
+              <td><span class="priority-chip">{{ inquiry.priority or 'Normal' }}</span></td>
+              <td>{{ inquiry.created_at.strftime('%Y-%m-%d') if inquiry.created_at else '-' }}</td>
+              <td><a
+                  href="{{ url_for('admin_inquiry_detail', inquiry_id=inquiry.inquiry_id) if inquiry.inquiry_id is defined else url_for('admin_inquiries') }}">View</a>
+              </td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="6">No recent inquiries yet. New customer requests will appear here.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </article>
+
+    <aside class="modern-panel reply-panel professional-reply-panel">
+      <span class="admin-kicker">Inquiry Detail</span>
+      <h2>Quick reply</h2>
+      <p>Select a ticket from the inbox to reply, update status, and notify the customer.</p>
+      <label>Status update
+        <select>
+          <option>Under Review</option>
+          <option>Pending</option>
+          <option>Fixed</option>
+          <option>Completed</option>
+        </select>
+      </label>
+      <label>Reply message
+        <textarea placeholder="Write a professional customer reply..."></textarea>
+      </label>
+      <a class="btn btn-primary" href="{{ url_for('admin_inquiries') }}">Open inbox</a>
+    </aside>
+  </section>
+
+  <section class="dashboard-chart-grid professional-analytics-grid">
+    <article class="modern-panel">
+      <div class="panel-head">
+        <div><span class="admin-kicker">Analytics</span>
+          <h2>Inquiry trends</h2>
+        </div><small>Last 7 days</small>
+      </div>
+      <div class="modern-bar-chart">
+        {% for day in daily_stats %}
+        {% set created_count = day.created|default(0, true) %}
+        {% set created_height = ((created_count / max_daily) * 100) if max_daily else 0 %}
+        {% set bar_height = created_height if created_height > 0 else 8 %}
+
+        <div>
+          <span class="chart-bar" data-height="{{ bar_height }}"></span>
+          <b>{{ day.label|default('Day', true) }}</b>
+          <small>{{ created_count }}</small>
+        </div>
+        {% else %}
+        {% for label in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] %}
+        {% set empty_height = loop.index * 9 + 12 %}
+
+        <div>
+          <span class="chart-bar" data-height="{{ empty_height }}"></span>
+          <b>{{ label }}</b>
+          <small>0</small>
+        </div>
+        {% endfor %}
+        {% endfor %}
+      </div>
+
+      <script>
+        document.querySelectorAll(".modern-bar-chart .chart-bar").forEach(function (bar) {
+          const height = parseFloat(bar.dataset.height) || 8;
+          const safeHeight = Math.max(8, Math.min(height, 100));
+          bar.style.height = safeHeight + "%";
+        });
+      </script>
+    </article>
+
+    <article class="modern-panel">
+      <div class="panel-head">
+        <div><span class="admin-kicker">Response Time</span>
+          <h2>Support performance</h2>
+        </div><small>Today</small>
+      </div>
+      <div class="response-ring">
+        <div class="ring-visual"><span>24h</span></div>
+        <div class="response-list">
+          <p><b>Pending:</b> {{ chart_data.pending|default(0, true) }}%</p>
+          <p><b>Completed:</b> {{ chart_data.resolved|default(0, true) }}%</p>
+          <p><b>Urgent:</b> {{ chart_data.urgent|default(0, true) }}%</p>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="dashboard-bottom-grid professional-bottom-grid">
+    <article class="modern-panel">
+      <div class="panel-head">
+        <div><span class="admin-kicker">Customers</span>
+          <h2>Latest customers</h2>
+        </div><a href="{{ url_for('admin_customers') }}">View all</a>
+      </div>
+      <div class="customer-mini-list">
+        {% for customer in customer_data[:5] %}
+<div>
+  <span>{{ loop.index }}</span>
+  <b>{{ customer.full_name|default('Customer', true) }}</b>
+  <small>{{ customer.email|default('Customer record', true) }}</small>
+</div>
+{% else %}
+
+        <div><span>1</span><b>No customers yet</b><small>Customer records will appear here.</small></div>
+        {% endfor %}
+      </div>
+    </article>
+
+    <article class="modern-panel">
+      <div class="panel-head">
+        <div><span class="admin-kicker">Workflow</span>
+          <h2>Admin actions</h2>
+        </div>
+      </div>
+      <div class="quick-action-grid">
+        <a href="{{ url_for('admin_inquiries') }}">Manage inquiries</a>
+        <a href="{{ url_for('admin_customers') }}">Customer list</a>
+        <a href="{{ url_for('admin_events') }}">Event updates</a>
+        <a href="{{ url_for('admin_settings') }}">Settings</a>
+      </div>
+    </article>
+  </section>
+</section>
+
+{% endblock %}

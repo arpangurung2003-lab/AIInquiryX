@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Contact | AI InquiryX{% endblock %}
+{% block content %}
+<section class="contact-hero-refined">
+  <div class="container">
+    <span class="section-tag">// Get In Touch</span>
+    <h1>Contact Us</h1>
+    <p>Reach our AI InquiryX team for product support, business inquiries, demos, and customer workflow assistance.</p>
+  </div>
+</section>
+
+<section class="section contact-reference-section">
+  <div class="container contact-reference-grid">
+    <aside class="contact-panel contact-details-panel">
+      <span class="section-tag">// Contact Info</span>
+      <h2>Get in touch with us</h2>
+      <p class="contact-lead">We are here to provide you with clear information and support. Whether you need help with
+        an inquiry, dashboard setup, customer tracking, or service details, our team is ready to respond professionally.
+      </p>
+
+      <div class="contact-info-list">
+        <div>
+          <span class="contact-icon">📍</span>
+          <p>Kathmandu, Nepal</p>
+        </div>
+        <div>
+          <span class="contact-icon">📞</span>
+          <p>+977 980-000-0000</p>
+        </div>
+        <div>
+          <span class="contact-icon">✉</span>
+          <p>support@inquiryx.com<br>info@inquiryx.com</p>
+        </div>
+      </div>
+
+      <div class="contact-social-block">
+        <h3>Follow Us</h3>
+        <div class="socials social-logos contact-round-socials" aria-label="Social platforms">
+          <a href="#" aria-label="Facebook" title="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M14 8h2V5h-2c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h2.3l.7-3h-3V9c0-.6.4-1 1-1z" />
+            </svg></a>
+          <a href="#" aria-label="WhatsApp" title="WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M12.04 2C6.54 2 2.08 6.42 2.08 11.88c0 1.75.46 3.46 1.34 4.97L2 22l5.3-1.39a9.98 9.98 0 0 0 4.74 1.2h.01c5.49 0 9.96-4.42 9.96-9.88S17.54 2 12.04 2zm5.86 13.98c-.25.7-1.46 1.33-2 1.42-.53.09-1.2.13-1.93-.1-.44-.14-1.01-.33-1.74-.65-3.06-1.33-5.05-4.5-5.2-4.71-.15-.2-1.24-1.64-1.24-3.12s.77-2.2 1.04-2.51c.27-.31.59-.39.79-.39.2 0 .4 0 .57.01.18.01.43-.07.67.51.25.62.86 2.14.93 2.3.08.16.13.34.03.55-.1.2-.15.34-.3.52-.15.18-.32.4-.46.53-.15.14-.3.28-.13.55.17.27.76 1.23 1.62 1.99 1.11.98 2.05 1.28 2.34 1.42.29.14.46.12.63-.07.17-.2.73-.84.93-1.13.2-.29.4-.24.67-.14.28.09 1.76.82 2.06.97.31.15.51.22.58.34.08.12.08.69-.18 1.39z" />
+            </svg></a>
+          <a href="#" aria-label="Instagram" title="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2.2A2.8 2.8 0 0 0 4.2 7v10A2.8 2.8 0 0 0 7 19.8h10a2.8 2.8 0 0 0 2.8-2.8V7A2.8 2.8 0 0 0 17 4.2H7zm10.55 1.65a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2.2A2.8 2.8 0 1 0 12 14.8 2.8 2.8 0 0 0 12 9.2z" />
+            </svg></a>
+          <a href="#" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg></a>
+        </div>
+      </div>
+    </aside>
+
+    <form class="form-card contact-panel contact-message-card" method="POST" data-loading-form>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <span class="section-tag">// Send Message</span>
+      <h2>Send us a message</h2>
+
+      <label>Your Name *</label>
+      <input name="name" placeholder="Enter your full name" required>
+
+      <label>Your Email *</label>
+      <input name="email" type="email" placeholder="Enter your email address" required>
+
+      <label>Phone Number</label>
+      <input name="phone" placeholder="Enter your phone number">
+
+      <label>Company Name</label>
+      <input name="company" placeholder="Enter company name">
+
+      <label>Subject *</label>
+      <input name="subject" placeholder="How can we help?" required>
+
+      <label>Message *</label>
+      <textarea name="message" placeholder="Write your message..." required></textarea>
+
+      <button class="btn btn-primary contact-submit-btn">Send Message</button>
+    </form>
+
+    <aside class="contact-panel contact-map-panel">
+      <span class="section-tag">// Find Us</span>
+      <h2>Find us</h2>
+      <iframe class="map contact-refined-map" src="https://www.google.com/maps?q=Kathmandu,Nepal&output=embed"
+        loading="lazy"></iframe>
+      <div class="map-note">
+        <strong>AI InquiryX Office</strong>
+        <span>Kathmandu, Nepal · Support available Mon–Sat</span>
+      </div>
+    </aside>
+  </div>
+</section>
+{% endblock %}

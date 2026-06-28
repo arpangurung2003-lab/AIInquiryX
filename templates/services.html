@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}Services | AI InquiryX{% endblock %}
+{% block content %}
+<section class="page-hero professional-hero">
+  <div class="container page-hero-grid services-hero-grid">
+    <div class="page-hero-copy"><span class="section-tag">// Services</span>
+      <h1>Inquiry services for fast, trusted customer support.</h1>
+      <p>AI InquiryX gives customers a clear way to submit requests and gives admins the tools to verify, prioritize,
+        reply, and resolve every inquiry professionally.</p>
+      <div class="benefit-pills"><span>Ticket submission</span><span>Live tracking</span><span>Admin dashboard</span>
+      </div>
+    </div>
+    <div class="hero-service-image"><img
+        src="https://images.pexels.com/photos/3184306/pexels-photo-3184306.jpeg?auto=compress&cs=tinysrgb&w=1400"
+        alt="Support team working together"></div>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <div class="max-center section-intro-clean"><span class="section-tag">// Core Services</span>
+      <h2>Complete inquiry management from first message to final resolution.</h2>
+      <p>Each service is built around a real customer support workflow: collect the right details, assign priority, keep
+        records, and update customers with confidence.</p>
+    </div>
+    <div class="service-feature-grid premium-service-grid">
+      <article class="service-feature-card"><span class="service-icon">01</span>
+        <h3>Structured Ticket Submission</h3>
+        <p>Capture customer details, category, priority, subject, and message using a clean high-conversion form.</p>
+      </article>
+      <article class="service-feature-card"><span class="service-icon">02</span>
+        <h3>Live Status Tracking</h3>
+        <p>Customers can check whether their inquiry is pending, under review, fixed, or completed.</p>
+      </article>
+      <article class="service-feature-card"><span class="service-icon">03</span>
+        <h3>Admin Dashboard Control</h3>
+        <p>Admins review inquiries, update progress, prepare replies, and monitor workload from one dashboard.</p>
+      </article>
+      <article class="service-feature-card"><span class="service-icon">04</span>
+        <h3>AI Reply Assistance</h3>
+        <p>Generate cleaner response drafts, summaries, completion notes, and classification support.</p>
+      </article>
+      <article class="service-feature-card"><span class="service-icon">05</span>
+        <h3>Email Notification Workflow</h3>
+        <p>Prepare professional updates when an inquiry is received, reviewed, fixed, or completed.</p>
+      </article>
+      <article class="service-feature-card"><span class="service-icon">06</span>
+        <h3>Customer Records</h3>
+        <p>Keep customer contact details, inquiry history, notes, and support context organized.</p>
+      </article>
+      <article class="service-feature-card"><span class="service-icon">07</span>
+        <h3>Priority Monitoring</h3>
+        <p>Sort urgent cases faster and make better response decisions with clear status visibility.</p>
+      </article>
+      <article class="service-feature-card"><span class="service-icon">08</span>
+        <h3>Performance Reporting</h3>
+        <p>Understand volume, recurring issues, response efficiency, and support quality.</p>
+      </article>
+    </div>
+  </div>
+</section>
+<section class="section surface-section">
+  <div class="container service-snapshot-grid">
+    <article class="snapshot-card"><img
+        src="https://images.pexels.com/photos/7709287/pexels-photo-7709287.jpeg?auto=compress&cs=tinysrgb&w=1200"
+        alt="Customer support communication">
+      <h3>Customer communication</h3>
+      <p>Give customers a professional experience from first inquiry to final update.</p>
+    </article>
+    <article class="snapshot-card"><img
+        src="https://images.pexels.com/photos/6476589/pexels-photo-6476589.jpeg?auto=compress&cs=tinysrgb&w=1200"
+        alt="Customer tracking portal dashboard">
+      <h3>Tracking portal</h3>
+      <p>Let customers follow progress with a secure, branded, and easy-to-use tracking page.</p>
+    </article>
+    <article class="snapshot-card"><img
+        src="https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&cs=tinysrgb&w=1200"
+        alt="Admin collaboration meeting">
+      <h3>Admin collaboration</h3>
+      <p>Help teams coordinate replies, monitor urgent issues, and work from one organized space.</p>
+    </article>
+  </div>
+</section>
+<section class="section">
+  <div class="container service-process-grid fixed-process-grid">
+    <div><span class="section-tag">// Support Workflow</span>
+      <h2>A simple process that removes confusion.</h2>
+      <p>Customers know where to submit and track their request. Admins know what needs attention first. That clear
+        structure improves support quality and website clarity.</p>
+      <div class="process-actions"><a class="btn btn-primary" href="{{ url_for('track_inquiry') }}">Track Inquiry</a><a
+          class="btn btn-outline" href="{{ url_for('contact') }}">Contact Team</a></div>
+    </div>
+    <div class="process-steps fixed-process-steps">
+      <div><b>1</b><span>Customer submits inquiry</span></div>
+      <div><b>2</b><span>System stores ticket details</span></div>
+      <div><b>3</b><span>Admin reviews priority</span></div>
+      <div><b>4</b><span>Customer receives update</span></div>
+      <div><b>5</b><span>Issue is fixed</span></div>
+      <div><b>6</b><span>Completion notice is shared</span></div>
+    </div>
+  </div>
+</section>
+{% endblock %}

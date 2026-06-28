@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <title>{% block title %}AI InquiryX{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+
+<body class="page-{{ request.endpoint|default('site') }}">
+    <header class="navbar" id="navbar">
+        <div class="container nav-inner">
+            <a href="{{ url_for('home') }}" class="brand"><span>AI</span><strong>InquiryX</strong></a>
+            <button class="menu-btn" id="menuBtn">☰</button>
+            <nav class="nav-links" id="navLinks">
+                <a class="{{ 'active' if request.endpoint == 'home' else '' }}" href="{{ url_for('home') }}">Home</a>
+                <a class="{{ 'active' if request.endpoint == 'about' else '' }}" href="{{ url_for('about') }}">About</a>
+                <a class="{{ 'active' if request.endpoint == 'services' else '' }}"
+                    href="{{ url_for('services') }}">Services</a>
+                <a class="{{ 'active' if request.endpoint == 'gallery' else '' }}"
+                    href="{{ url_for('gallery') }}">Gallery</a>
+                <a class="{{ 'active' if request.endpoint == 'events' else '' }}"
+                    href="{{ url_for('events') }}">Events</a>
+                <a class="{{ 'active' if request.endpoint in ['blog','blog_article'] else '' }}"
+                    href="{{ url_for('blog') }}">Blog</a>
+                <a class="{{ 'active' if request.endpoint == 'contact' else '' }}"
+                    href="{{ url_for('contact') }}">Contact</a>
+                <a class="btn btn-outline" href="{{ url_for('track_inquiry') }}">Track Inquiry</a>
+                <a class="btn btn-primary" href="{{ url_for('submit_inquiry') }}">Submit Inquiry</a>
+                <a class="btn btn-admin-login" href="{{ url_for('admin_login') }}">Admin Login</a>
+            </nav>
+        </div>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-wrap">
+        {% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <main id="top">{% block content %}{% endblock %}</main>
+
+    <footer class="footer ai-reference-footer">
+        <div class="container reference-footer-grid">
+            <div>
+                <h4>Contact Info</h4>
+                <p>Kathmandu, Nepal</p>
+                <p>+977 980-000-0000</p>
+                <p>support@inquiryx.com</p>
+                <p>info@inquiryx.com</p>
+            </div>
+
+            <div>
+                <h4>Quick Links</h4>
+                <a class="{{ 'active' if request.endpoint == 'about' else '' }}" href="{{ url_for('about') }}">About</a>
+                <a class="{{ 'active' if request.endpoint == 'services' else '' }}"
+                    href="{{ url_for('services') }}">Services</a>
+                <a class="{{ 'active' if request.endpoint == 'gallery' else '' }}"
+                    href="{{ url_for('gallery') }}">Gallery</a>
+                <a class="{{ 'active' if request.endpoint == 'events' else '' }}"
+                    href="{{ url_for('events') }}">Events</a>
+                <a class="{{ 'active' if request.endpoint == 'contact' else '' }}"
+                    href="{{ url_for('contact') }}">Contact</a>
+            </div>
+
+            <div>
+                <h4>Our Services</h4>
+                <a href="{{ url_for('services') }}">AI Reply Assistance</a>
+                <a href="{{ url_for('services') }}">Customer Inquiry Tracking</a>
+                <a href="{{ url_for('services') }}">Workflow Automation</a>
+                <a href="{{ url_for('services') }}">Dashboard Analytics</a>
+                <a href="{{ url_for('services') }}">Secure Admin Access</a>
+            </div>
+
+            <div class="footer-brand-column">
+                <a class="brand footer-brand" href="{{ url_for('home') }}">
+                    <span>AI</span><strong>InquiryX</strong>
+                </a>
+
+                <p>Transforming customer support with a cleaner inquiry workflow, AI-assisted responses, and organized
+                    admin control.</p>
+
+                <strong class="footer-slogan">TRACK. RESOLVE. EXCEL.</strong>
+            </div>
+        </div>
+        <div class="container footer-backtop-row">
+            <button class="footer-backtop" id="footerBackTop" type="button">
+                Back to top ↑
+            </button>
+        </div>
+        <div class="container reference-footer-bottom">
+            <p>Copyright © {{ current_year }} AI InquiryX</p>
+            <div class="footer-socials reference-footer-socials" aria-label="AI InquiryX social links">
+                <a href="#" aria-label="Facebook" title="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M14 8h2V5h-2c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h2.3l.7-3h-3V9c0-.6.4-1 1-1z" />
+                    </svg></a>
+                <a href="#" aria-label="WhatsApp" title="WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                            d="M12.04 2C6.54 2 2.08 6.42 2.08 11.88c0 1.75.46 3.46 1.34 4.97L2 22l5.3-1.39a9.98 9.98 0 0 0 4.74 1.2h.01c5.49 0 9.96-4.42 9.96-9.88S17.54 2 12.04 2zm5.86 13.98c-.25.7-1.46 1.33-2 1.42-.53.09-1.2.13-1.93-.1-.44-.14-1.01-.33-1.74-.65-3.06-1.33-5.05-4.5-5.2-4.71-.15-.2-1.24-1.64-1.24-3.12s.77-2.2 1.04-2.51c.27-.31.59-.39.79-.39.2 0 .4 0 .57.01.18.01.43-.07.67.51.25.62.86 2.14.93 2.3.08.16.13.34.03.55-.1.2-.15.34-.3.52-.15.18-.32.4-.46.53-.15.14-.3.28-.13.55.17.27.76 1.23 1.62 1.99 1.11.98 2.05 1.28 2.34 1.42.29.14.46.12.63-.07.17-.2.73-.84.93-1.13.2-.29.4-.24.67-.14.28.09 1.76.82 2.06.97.31.15.51.22.58.34.08.12.08.69-.18 1.39z" />
+                    </svg></a>
+                <a href="#" aria-label="Instagram" title="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                            d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2.2A2.8 2.8 0 0 0 4.2 7v10A2.8 2.8 0 0 0 7 19.8h10a2.8 2.8 0 0 0 2.8-2.8V7A2.8 2.8 0 0 0 17 4.2H7zm10.55 1.65a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2.2A2.8 2.8 0 1 0 12 14.8 2.8 2.8 0 0 0 12 9.2z" />
+                    </svg></a>
+                <a href="#" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                            d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                    </svg></a>
+            </div>
+        </div>
+    </footer>
+
+    <div class="chat-widget" id="chatWidget">
+        <button class="chat-bubble" id="chatToggle" aria-label="Open AI chat">
+            <svg class="ai-chat-icon" viewBox="0 0 64 64" aria-hidden="true">
+                <rect class="ai-chat-bg" x="4" y="4" width="56" height="56" rx="18"></rect>
+                <path class="ai-chat-face"
+                    d="M20 21h24c4.8 0 8.5 3.8 8.5 8.5v7.2c0 4.8-3.8 8.5-8.5 8.5H34.5L25 52v-6.8H20c-4.8 0-8.5-3.8-8.5-8.5v-7.2C11.5 24.8 15.2 21 20 21z">
+                </path>
+                <circle class="ai-chat-eye" cx="27.5" cy="33.2" r="3"></circle>
+                <circle class="ai-chat-eye" cx="38.5" cy="33.2" r="3"></circle>
+            </svg>
+        </button>
+        <div class="chat-panel" id="chatPanel">
+            <div class="chat-head"><strong>InquiryX AI Help</strong><button id="chatClose">×</button></div>
+            <div class="chat-body" id="chatBody">
+                <div class="bot-msg">Hello! I’m your AI assistant. Ask me about submitting inquiries, tracking tickets,
+                    events, or admin support.</div>
+            </div>
+            <div class="quick-replies">
+                <button data-msg="How do I submit an inquiry?">Submit</button>
+                <button data-msg="How can I track status?">Track</button>
+                <button data-msg="Show upcoming events">Events</button>
+            </div>
+            <form class="chat-form" id="chatForm"><input id="chatInput" name="message"
+                    placeholder="Type your question..." autocomplete="off"><button type="submit">Send</button></form>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+
+</html>

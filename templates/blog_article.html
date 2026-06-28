@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}{{ article.title }} | AI InquiryX{% endblock %}
+{% block content %}
+<section class="page-hero blog-article-hero">
+  <div class="container">
+    <span class="section-tag">// {{ article.category }}</span>
+    <h1>{{ article.title }}</h1>
+    <p>{{ article.summary }}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container article-layout">
+    <article class="article-prose">
+      <img class="article-hero-image" src="{{ article.image }}" alt="{{ article.title }}">
+      <p class="article-lead">{{ article.lead }}</p>
+      {% for paragraph in article.paragraphs %}
+      <p>{{ paragraph }}</p>
+      {% endfor %}
+      <h3>Key takeaways</h3>
+      <ul>
+        {% for item in article.highlights %}
+        <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+      <a class="btn btn-primary" href="{{ url_for('blog') }}">Back to Articles</a>
+    </article>
+  </div>
+</section>
+{% endblock %}

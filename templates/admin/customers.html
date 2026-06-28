@@ -1,0 +1,75 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Customers | AI InquiryX{% endblock %}
+{% block page_heading %}Customers{% endblock %}
+{% block content %}
+<section class="page-control-hero customers-hero">
+    <div>
+        <span class="admin-kicker">Customer intelligence</span>
+        <h1>Customer Records</h1>
+        <p>View guest customer records created from inquiry submissions. Customer signup is disabled, but records are
+            still organized automatically.</p>
+    </div>
+    <a class="btn btn-primary" href="{{ url_for('submit_inquiry') }}">Open public inquiry form</a>
+</section>
+
+<section class="metric-grid refined-metrics compact-metrics">
+    <article class="metric-card"><span>Total Customers</span><strong>{{ total_customers }}</strong>
+        <p>Saved contact records</p>
+    </article>
+    <article class="metric-card"><span>Active Customers</span><strong>{{ active_customers }}</strong>
+        <p>With at least one inquiry</p>
+    </article>
+    <article class="metric-card"><span>Open Customer Cases</span><strong>{{ open_customer_count }}</strong>
+        <p>Pending or in-progress</p>
+    </article>
+    <article class="metric-card"><span>Total Inquiries</span><strong>{{ total_inquiries }}</strong>
+        <p>Across all customers</p>
+    </article>
+</section>
+
+<form class="admin-filter refined-filter" method="GET">
+    <label class="filter-search"><span>Search customer</span><input name="search" value="{{ search }}"
+            placeholder="Name, email, phone, company"></label>
+    <button class="btn btn-primary">Search</button>
+    <a class="btn btn-outline" href="{{ url_for('admin_customers') }}">Reset</a>
+</form>
+
+<section class="admin-panel refined-panel">
+    <div class="admin-card-head">
+        <div><span class="admin-kicker">Directory</span>
+            <h2>Customer list</h2>
+        </div>
+        <strong>{{ customers|length }} shown</strong>
+    </div>
+    <div class="customer-card-grid">
+        {% for customer, total, last_inquiry, open_count in customers %}
+        <article class="customer-record-card">
+            <div class="customer-record-top">
+                <span class="customer-avatar">{{ customer.full_name[:1]|upper }}</span>
+                <div>
+                    <h3>{{ customer.full_name }}</h3>
+                    <p>{{ customer.company or 'Guest customer' }}</p>
+                </div>
+            </div>
+            <div class="customer-record-meta">
+                <span>Email</span><strong>{{ customer.email }}</strong>
+                <span>Phone</span><strong>{{ customer.phone or '-' }}</strong>
+            </div>
+            <div class="customer-record-stats">
+                <div><b>{{ total }}</b><small>Total inquiries</small></div>
+                <div><b>{{ open_count or 0 }}</b><small>Open cases</small></div>
+            </div>
+            <div class="customer-record-footer">
+                <small>Last inquiry: {{ last_inquiry.strftime('%d %b %Y') if last_inquiry else 'None' }}</small>
+                <a href="{{ url_for('admin_customer_detail', customer_id=customer.id) }}">View record →</a>
+            </div>
+        </article>
+        {% else %}
+        <div class="empty-admin-state">
+            <h3>No customer records found</h3>
+            <p>Try removing the search filter or submit a test inquiry.</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

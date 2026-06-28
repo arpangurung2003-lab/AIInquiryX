@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" role="img" aria-label="Secure Admin Portal">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#F8FAFC"/><stop offset="1" stop-color="#E4E4FF"/></linearGradient>
+<filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="24" stdDeviation="22" flood-color="#1E293B" flood-opacity=".13"/></filter>
+</defs>
+<rect width="900" height="560" rx="36" fill="url(#bg)"/>
+<circle cx="770" cy="90" r="118" fill="#6260FF" opacity=".13"/>
+<circle cx="105" cy="470" r="130" fill="#10B981" opacity=".10"/>
+<g filter="url(#shadow)"><path d="M450 95l230 82v160c0 120-88 200-230 248-142-48-230-128-230-248V177z" fill="#FFFFFF"/><path d="M450 140l170 60v128c0 85-62 143-170 181-108-38-170-96-170-181V200z" fill="#E4E4FF"/><rect x="365" y="290" width="170" height="118" rx="22" fill="#6260FF"/><path d="M395 290v-38a55 55 0 0 1 110 0v38" fill="none" stroke="#6260FF" stroke-width="22" stroke-linecap="round"/><circle cx="450" cy="348" r="15" fill="#FFFFFF"/><path d="M450 360v28" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/></g>
+<text x="70" y="500" font-family="Poppins, Arial" font-size="30" font-weight="800" fill="#1E293B">Secure Admin Portal</text>
+<text x="70" y="532" font-family="Inter, Arial" font-size="17" fill="#64748B">Protected authentication and customer data</text>
+</svg>

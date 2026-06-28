@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Customer Portal | AI InquiryX{% endblock %}
+{% block content %}
+<section class="page-hero form-page-hero">
+  <div class="container"><span class="section-tag">// Customer Portal</span>
+    <h1>Access your inquiry dashboard.</h1>
+    <p>Use the email and tracking ID from one of your submitted inquiries.</p>
+  </div>
+</section>
+<section class="section">
+  <div class="container auth-lite-grid">
+    <form class="form-card portal-login-card" method="POST" data-loading-form>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <label>Email address</label><input name="email" type="email" required placeholder="you@example.com">
+      <label>Tracking ID</label><input name="tracking_id" required placeholder="AIX-1A2B3C4D">
+      <button class="btn btn-primary">Open Customer Dashboard</button>
+      <p class="muted">This lightweight portal avoids exposing customer data by requiring both email and tracking ID.
+      </p>
+    </form>
+    <article class="portal-side-card"><span class="section-tag">Secure access</span>
+      <h2>What you can do</h2>
+      <p>View all inquiries linked to your email, check current status, review admin replies, rate completed support,
+        and submit another request.</p><a class="btn btn-outline" href="{{ url_for('submit_inquiry') }}">Submit new
+        inquiry</a>
+    </article>
+  </div>
+</section>
+{% endblock %}

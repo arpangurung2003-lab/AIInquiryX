@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Submit Inquiry | AI InquiryX{% endblock %}
+{% block content %}
+<section class="page-hero form-page-hero submit-hero-tight">
+  <div class="container">
+    <button class="back-btn" type="button" onclick="history.back()">← Back</button>
+    <span class="section-tag">// Submit Inquiry</span>
+    <h1>Create a professional support ticket.</h1>
+    <p>Submit your request with contact details, category, message, and optional attachment. You will receive a tracking
+      ID and status updates.</p>
+  </div>
+</section>
+<section class="section submit-inquiry-section">
+  <div class="container form-page-container">
+    <div class="customer-helper-strip guest-helper-strip">
+      <strong>No signup needed</strong>
+      <span>Your inquiry will be saved as <b>Under Review</b>. Use your tracking ID plus email or phone to check
+        progress.</span>
+      <a href="{{ url_for('track_inquiry') }}">Track Inquiry →</a>
+    </div>
+    <form class="form-card enhanced-inquiry-form pro-form-card" method="POST" enctype="multipart/form-data"
+      data-loading-form>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <div class="form-grid inquiry-form-grid">
+        <label>Full name *<input name="full_name" placeholder="Your full name"
+            value="{{ form_data.full_name if form_data is defined else '' }}" required></label>
+        <label>Email address *<input name="email" type="email" placeholder="yourmail@gmail.com"
+            value="{{ form_data.email if form_data is defined else '' }}" required></label>
+        <label>Phone number<input name="phone" placeholder="+977 9800000000" pattern="[0-9+()\-\s]{7,20}"
+            value="{{ form_data.phone if form_data is defined else '' }}"></label>
+        <label>Company / Organization<input name="company" placeholder="Optional"
+            value="{{ form_data.company if form_data is defined else '' }}"></label>
+        <label>Inquiry category
+          <select name="category">
+            <option>General</option>
+            <option>Technical</option>
+            <option>Complaint</option>
+            <option>Billing</option>
+            <option>Feedback</option>
+            <option>Account</option>
+          </select>
+        </label>
+        <label>Priority
+          <select name="priority">
+            <option>Low</option>
+            <option selected>Normal</option>
+            <option>High</option>
+            <option>Urgent</option>
+          </select>
+        </label>
+      </div>
+      <label class="form-field">Update preference
+        <select name="contact_preference">
+          <option selected>Email</option>
+          <option>Phone</option>
+          <option>Both</option>
+        </select>
+      </label>
+      <label class="form-field form-wide">Inquiry title / subject *<input name="subject"
+          placeholder="Example: Cannot access my dashboard"
+          value="{{ form_data.subject if form_data is defined else '' }}" required></label>
+      <label class="form-field form-wide">Inquiry message *<textarea name="message"
+          placeholder="Explain your problem clearly. Include what happened, when it happened, and what help you need."
+          required>{{ form_data.message if form_data is defined else '' }}</textarea></label>
+      {% if pending_email is defined %}
+      <div class="verification-panel">
+        <strong>Email verification required</strong>
+        <p>Enter the 6-digit code sent to <b>{{ pending_email }}</b>. In local development, the code may appear in the
+          flash message if SMTP is not configured.</p>
+        <label>Verification code *<input name="email_verification_code" inputmode="numeric" maxlength="6"
+            placeholder="123456" required></label>
+      </div>
+      {% endif %}
+      <label class="form-field form-wide">Optional attachment / image<input name="attachment" type="file"
+          accept="image/*,.pdf,.doc,.docx,.txt"></label>
+      <div class="form-actions-row">
+        <button class="btn btn-primary" type="submit"><span class="btn-label">Submit Inquiry →</span><span
+            class="btn-loader" aria-hidden="true"></span></button>
+        <small>After submitting: “Your inquiry has been received. Our team is reviewing it.”</small>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

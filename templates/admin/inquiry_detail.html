@@ -1,0 +1,135 @@
+{% extends "admin/base_admin.html" %}
+{% block content %}
+<div class="admin-title">
+    <h1>Inquiry {{ inquiry.tracking_id or ('#' ~ inquiry.inquiry_id) }}</h1>
+    <p>{{ inquiry.subject }}</p>
+</div>
+
+<section class="admin-card detail-card ai-enabled-card" data-inquiry-id="{{ inquiry.inquiry_id }}">
+    <div class="inquiry-profile-grid">
+        <div>
+            <span class="admin-kicker">Customer</span>
+            <h2>{{ inquiry.customer_name }}</h2>
+            <p>{{ inquiry.email }}{% if inquiry.phone %} · {{ inquiry.phone }}{% endif %} · Updates: {{
+                inquiry.contact_preference or 'Email' }}</p>
+        </div>
+        <div class="inquiry-chip-group">
+            <span class="badge status-{{ inquiry.status|lower|replace(' ', '-') }}">{{ inquiry.status }}</span>
+            <span class="badge priority-{{ inquiry.priority|lower }}">{{ inquiry.priority }}</span>
+            <span class="badge">{{ inquiry.category }}</span>
+        </div>
+    </div>
+
+    <div class="inquiry-message-box">
+        <span class="admin-kicker">Customer message</span>
+        <p>{{ inquiry.message }}</p>
+    </div>
+
+
+    {% if inquiry.attachment_filename %}
+    <div class="inquiry-message-box attachment-preview-card">
+        <span class="admin-kicker">Attachment preview</span>
+        {% set attachment_url = url_for('admin_attachment', inquiry_id=inquiry.inquiry_id) %}
+        {% set fname = (inquiry.attachment_original or inquiry.attachment_filename)|lower %}
+        {% if fname.endswith(('.png','.jpg','.jpeg','.gif','.webp')) %}
+        <a href="{{ attachment_url }}" target="_blank"><img class="attachment-preview-image" src="{{ attachment_url }}"
+                alt="Uploaded attachment preview"></a>
+        {% elif fname.endswith('.pdf') %}
+        <iframe class="attachment-preview-frame" src="{{ attachment_url }}" title="PDF attachment preview"></iframe>
+        {% else %}
+        <div class="file-preview-box">📎 {{ inquiry.attachment_original or 'Uploaded file' }}</div>
+        {% endif %}
+        <p><a href="{{ attachment_url }}" target="_blank">Open attachment in new tab</a></p>
+    </div>
+    {% endif %}
+
+    <div class="ai-action-panel">
+        <div>
+            <span class="admin-kicker">AI assistant</span>
+            <h2>Generate, summarize, classify, then review before sending.</h2>
+            <p>AI output is never sent automatically. Copy or edit the draft inside the response box first.</p>
+        </div>
+        <div class="ai-actions">
+            <button type="button" class="ai-btn" data-ai-action="reply"
+                data-url="{{ url_for('admin_ai_reply', inquiry_id=inquiry.inquiry_id) }}">✨ Generate Reply with
+                AI</button>
+            <button type="button" class="ai-btn secondary" data-ai-action="summary"
+                data-url="{{ url_for('admin_ai_summarize', inquiry_id=inquiry.inquiry_id) }}">📝 Summarize
+                Inquiry</button>
+            <button type="button" class="ai-btn secondary" data-ai-action="classification"
+                data-url="{{ url_for('admin_ai_classify', inquiry_id=inquiry.inquiry_id) }}">⚡ Detect Priority</button>
+            <button type="button" class="ai-btn secondary" data-ai-action="completion"
+                data-url="{{ url_for('admin_ai_completion_notification', inquiry_id=inquiry.inquiry_id) }}">✅ Completion
+                Notice</button>
+        </div>
+    </div>
+
+    <div id="aiResultCard" class="ai-result-card" hidden>
+        <div class="ai-result-head">
+            <div>
+                <span class="admin-kicker" id="aiResultType">AI result</span>
+                <h3>Review and edit before using</h3>
+            </div>
+            <button type="button" class="copy-ai-btn" id="copyAiBtn">Copy</button>
+        </div>
+        <textarea id="aiResultText" class="ai-result-text"
+            placeholder="AI output will appear here. You can edit it before copying or saving."></textarea>
+        <button type="button" class="btn btn-primary" id="useAiReplyBtn">Use in Admin Response Box</button>
+    </div>
+
+    <form method="POST" class="admin-detail-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <label>Status</label>
+        <select name="status">
+            {% for status in valid_statuses %}
+            <option value="{{ status }}" {% if inquiry.status==status %}selected{% endif %}>{{ status }}</option>
+            {% endfor %}
+        </select>
+        <label>Priority</label>
+        <select name="priority">
+            <option {% if inquiry.priority=='Low' %}selected{% endif %}>Low</option>
+            <option {% if inquiry.priority=='Normal' %}selected{% endif %}>Normal</option>
+            <option {% if inquiry.priority=='High' %}selected{% endif %}>High</option>
+            <option {% if inquiry.priority=='Urgent' %}selected{% endif %}>Urgent</option>
+        </select>
+        <label>Admin Response</label>
+        <textarea id="adminResponseBox" name="admin_response">{{ inquiry.admin_response or '' }}</textarea>
+        <label>Internal note <small>(admin only)</small></label>
+        <textarea name="internal_note"
+            placeholder="Private note for admin/support team. Customers cannot see this."></textarea>
+        {% if current_user.role != 'Viewer' %}<button class="btn btn-primary">Update Inquiry</button>{% else %}<p
+            class="muted">Viewer role can read inquiries but cannot update them.</p>{% endif %}
+    </form>
+
+    {% if current_user.role == 'Super Admin' %}<form method="POST"
+        action="{{ url_for('admin_delete_inquiry', inquiry_id=inquiry.inquiry_id) }}"
+        onsubmit="return confirm('Delete this inquiry?')">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button class="danger-btn">Delete Inquiry</button>
+    </form>{% endif %}
+
+
+    <div class="workflow-grid">
+        <section class="workflow-panel">
+            <span class="admin-kicker">Status history</span>
+            {% for item in inquiry.status_history|sort(attribute='created_at', reverse=True) %}
+            <div class="timeline-item"><b>{{ item.old_status or 'Created' }} → {{ item.new_status }}</b><small>{{
+                    item.created_at.strftime('%Y-%m-%d %H:%M') if item.created_at else '' }}</small></div>
+            {% else %}
+            <p class="muted">No status changes recorded yet.</p>
+            {% endfor %}
+        </section>
+        <section class="workflow-panel">
+            <span class="admin-kicker">Internal notes</span>
+            {% for note in inquiry.internal_notes|sort(attribute='created_at', reverse=True) %}
+            <div class="timeline-item"><b>{{ note.admin.name if note.admin else 'Admin' }}</b>
+                <p>{{ note.note }}</p><small>{{ note.created_at.strftime('%Y-%m-%d %H:%M') if note.created_at else ''
+                    }}</small>
+            </div>
+            {% else %}
+            <p class="muted">No internal notes yet.</p>
+            {% endfor %}
+        </section>
+    </div>
+</section>
+{% endblock %}

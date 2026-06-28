@@ -1,0 +1,76 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Customer Detail | AI InquiryX{% endblock %}
+{% block page_heading %}Customer Detail{% endblock %}
+{% block content %}
+<section class="page-control-hero customer-detail-hero">
+    <div>
+        <span class="admin-kicker">Customer profile</span>
+        <h1>{{ customer.full_name }}</h1>
+        <p>{{ customer.email }} · {{ customer.phone or 'No phone number' }}</p>
+    </div>
+    <a class="btn btn-outline" href="{{ url_for('admin_customers') }}">← Back to customers</a>
+</section>
+
+<section class="admin-grid-2">
+    <article class="admin-panel refined-panel">
+        <span class="admin-kicker">Contact information</span>
+        <div class="detail-list">
+            <div><span>Name</span><strong>{{ customer.full_name }}</strong></div>
+            <div><span>Email</span><strong>{{ customer.email }}</strong></div>
+            <div><span>Phone</span><strong>{{ customer.phone or '-' }}</strong></div>
+            <div><span>Company</span><strong>{{ customer.company or '-' }}</strong></div>
+            <div><span>Created</span><strong>{{ customer.created_at.strftime('%d %b %Y') if customer.created_at else
+                    'N/A' }}</strong></div>
+        </div>
+    </article>
+    <article class="admin-panel refined-panel">
+        <span class="admin-kicker">Summary</span>
+        <div class="customer-record-stats large-stats">
+            <div><b>{{ inquiries|length }}</b><small>Total inquiries</small></div>
+            <div><b>{{ inquiries|selectattr('status','in',['Pending','Under Review'])|list|length }}</b><small>Open
+                    cases</small></div>
+        </div>
+        <p class="muted">This is an admin-only record. Customers do not sign in; they track by Inquiry ID or email.</p>
+    </article>
+</section>
+
+<section class="admin-panel refined-panel">
+    <div class="admin-card-head">
+        <div><span class="admin-kicker">History</span>
+            <h2>Inquiry history</h2>
+        </div>
+    </div>
+    <div class="table-wrap refined-table-wrap">
+        <table class="refined-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Subject</th>
+                    <th>Status</th>
+                    <th>Priority</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in inquiries %}
+                <tr>
+                    <td>#{{ item.inquiry_id }}</td>
+                    <td>{{ item.subject }}</td>
+                    <td><span class="badge status-{{ item.status|lower|replace(' ', '-') }}">{{ item.status }}</span>
+                    </td>
+                    <td><span class="badge priority-{{ item.priority|lower }}">{{ item.priority }}</span></td>
+                    <<td>{{ item.created_at.strftime('%d %b %Y') if item.created_at else 'N/A' }}</td>
+                        <td><a class="table-action-link"
+                                href="{{ url_for('admin_inquiry_detail', inquiry_id=item.inquiry_id) }}">View</a></td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6">No inquiries for this customer yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

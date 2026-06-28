@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+{% block title %}AI InquiryX | Customer Inquiry Tracking System{% endblock %}
+{% block content %}
+<section class="hero premium-home-hero">
+  <div class="container premium-hero-grid">
+    <div class="hero-copy">
+      <span class="section-tag">Customer inquiry tracking system</span>
+      <h1>Your gateway to intelligent inquiry management.</h1>
+      <p>AI InquiryX helps businesses capture, verify, prioritize, track, and resolve customer questions from one
+        polished Flask and PostgreSQL-powered support platform.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="{{ url_for('submit_inquiry') }}">Submit Inquiry</a>
+        <a class="btn btn-outline" href="{{ url_for('track_inquiry') }}">Track Status</a>
+        <a class="btn btn-soft" href="{{ url_for('admin_login') }}">Admin Login</a>
+      </div>
+      <div class="benefit-pills"><span>SMTP verification</span><span>Gemini AI replies</span><span>Admin
+          analytics</span><span>Secure tracking ID</span></div>
+    </div>
+    <div class="hero-visual-wrap">
+      <div class="hero-main-shot"><img
+          src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1800&q=90?"
+          alt="Customer support team helping clients with inquiry management"></div>
+      <div class="hero-stat-strip">
+        <div class="hero-stat-card">
+          <strong class="count-number" data-count="500" data-suffix="+">0</strong>
+          <span>Inquiries handled</span>
+        </div>
+
+        <div class="hero-stat-card">
+          <strong class="count-number" data-count="98" data-suffix="%">0</strong>
+          <span>Completed tickets</span>
+        </div>
+
+        <div class="hero-stat-card">
+          <strong class="count-number" data-count="24" data-suffix="h">0</strong>
+          <span>Average response</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section home-image-showcase">
+  <div class="container">
+    <div class="section-head-left">
+      <div><span class="section-tag">// Platform Highlights</span>
+        <h2>Professional support tools for modern teams.</h2>
+      </div>
+      <p>Every image matches its topic: support, tracking, admin access, and analytics.</p>
+    </div>
+    <div class="showcase-grid premium-showcase-grid">
+      <article class="showcase-tile premium-showcase-tile"><img
+          src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1200"
+          alt="Customer support specialist with client">
+        <h3>Professional support workflow</h3>
+        <p>Clean customer communication from first submission to final resolution.</p>
+      </article>
+      <article class="showcase-tile premium-showcase-tile"><img
+          src="https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=1200"
+          alt="Analytics and tracking dashboard">
+        <h3>Customer tracking portal</h3>
+        <p>Customers follow progress with a secure tracking ID and clear status updates.</p>
+      </article>
+      <article class="showcase-tile premium-showcase-tile"><img
+          src="https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=1200"
+          alt="Admin working on secure portal">
+        <h3>AI-assisted admin access</h3>
+        <p>Protected dashboard pages for authenticated administrators and support teams.</p>
+      </article>
+      <article class="showcase-tile premium-showcase-tile"><img
+          src="https://images.pexels.com/photos/7567434/pexels-photo-7567434.jpeg?auto=compress&cs=tinysrgb&w=1200"
+          alt="Performance report dashboard">
+        <h3>Support performance insights</h3>
+        <p>Understand response quality, workload, and service improvement opportunities.</p>
+      </article>
+    </div>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <div class="max-center"><span class="section-tag">Unified support workflow</span>
+      <h2>Everything needed to manage customer inquiries professionally.</h2>
+      <p>One clean website structure, one dashboard experience, and one modern design system for customers and admins.
+      </p>
+    </div>
+    <div class="cards-3 content-card-grid">
+      <article class="card content-card"><span class="num">01</span>
+        <h3>Ticket Submission</h3>
+        <p>Customers submit complete inquiry details with category, priority, contact preference, and structured
+          validation.</p><a href="{{ url_for('submit_inquiry') }}" class="card-link">Start ticket →</a>
+      </article>
+      <article class="card content-card"><span class="num">02</span>
+        <h3>Live Tracking</h3>
+        <p>Customers can track inquiry progress with secure tracking IDs and see clear updates from Pending to
+          Completed.</p><a href="{{ url_for('track_inquiry') }}" class="card-link">Track inquiry →</a>
+      </article>
+      <article class="card content-card"><span class="num">03</span>
+        <h3>Admin Analytics</h3>
+        <p>Admins monitor volume, urgency, notifications, customer details, and support actions from one place.</p><a
+          href="{{ url_for('admin_login') }}" class="card-link">Open admin →</a>
+      </article>
+    </div>
+  </div>
+</section>
+<section class="section surface-section">
+  <div class="container about-grid premium-about-grid">
+    <div><span class="section-tag">About InquiryX</span>
+      <h2>Built for faster decisions and cleaner customer communication.</h2>
+      <p>AI InquiryX turns scattered customer requests into a structured workflow with PostgreSQL records, SMTP
+        notifications, secure authentication, and AI-assisted replies.</p>
+      <ul class="check-list">
+        <li>Organized customer inquiry workflows</li>
+        <li>Faster admin response planning</li>
+        <li>Professional email communication</li>
+        <li>Modern responsive public website</li>
+      </ul>
+    </div>
+    <div class="image-card photo-image-card"><img
+        src="https://images.pexels.com/photos/3184416/pexels-photo-3184416.jpeg?auto=compress&cs=tinysrgb&w=1400"
+        alt="Business team planning customer support workflow"></div>
+  </div>
+</section>
+<section class="section">
+  <div class="container analytics-grid premium-feature-grid">
+    <div class="image-card photo-image-card"><img
+        src="https://images.pexels.com/photos/669615/pexels-photo-669615.jpeg?auto=compress&cs=tinysrgb&w=1400"
+        alt="Analytics dashboard for support team"></div>
+    <div><span class="section-tag">Dashboard features</span>
+      <h2>Modern admin widgets for real support work.</h2>
+      <p>Review inquiries, update statuses, send completion notices, export reports, manage customers, and track
+        activities without harming the backend logic.</p>
+      <ul class="check-list">
+        <li>Gemini AI reply, summary, and classification support.</li>
+        <li>SMTP notification logging for inquiry status updates.</li>
+        <li>Customer, event, blog, gallery, and analytics pages preserved.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+<section class="section testimonials-section clean-testimonial-section">
+  <div class="container">
+    <div class="max-center clean-testimonial-intro"><span class="section-tag">// Happy Clients</span>
+      <h2>Trusted by teams who care about faster customer support.</h2>
+      <p>AI InquiryX helps support teams organize inquiries, track progress, and keep customers updated with a cleaner
+        professional workflow.</p>
+    </div>
+    <div class="clean-testimonial-wrapper">
+      <div class="clean-testimonial-main">
+        <article class="clean-review-card is-active">
+          <div class="clean-stars">★★★★★</div>
+          <p>AI InquiryX helped us manage customer inquiries faster and more clearly. The customer tracking portal
+            reduced repeated follow-up calls because clients can check their status anytime.</p>
+          <div class="clean-client-row"><img
+              src="https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=300"
+              alt="Sarah Lama">
+            <div>
+              <h3>Sarah Lama</h3><span>Small Business Owner</span>
+            </div>
+          </div>
+        </article>
+        <article class="clean-review-card">
+          <div class="clean-stars">★★★★★</div>
+          <p>The admin dashboard feels clean and practical. Our team can review new inquiries, update status names
+            consistently, and notify customers without losing important details.</p>
+          <div class="clean-client-row"><img
+              src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=300"
+              alt="David Shrestha">
+            <div>
+              <h3>David Shrestha</h3><span>Support Manager</span>
+            </div>
+          </div>
+        </article>
+        <article class="clean-review-card">
+          <div class="clean-stars">★★★★★</div>
+          <p>The AI-assisted response tools save time while still keeping every message professional. It makes inquiry
+            handling smoother for both our staff and customers.</p>
+          <div class="clean-client-row"><img
+              src="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=300"
+              alt="Michael Reed">
+            <div>
+              <h3>Michael Reed</h3><span>Operations Lead</span>
+            </div>
+          </div>
+        </article>
+        <article class="clean-review-card">
+          <div class="clean-stars">★★★★★</div>
+          <p>The analytics section gives us a quick view of pending, completed, and urgent inquiries. It helps us
+            understand workload and improve response planning every week.</p>
+          <div class="clean-client-row"><img
+              src="https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg?auto=compress&cs=tinysrgb&w=300"
+              alt="Anurodh Sapkota">
+            <div>
+              <h3>Anurodh Sapkota</h3><span>Business Analyst</span>
+            </div>
+          </div>
+        </article>
+      </div>
+      <div class="clean-testimonial-side">
+        <button type="button" class="clean-thumb is-active" data-clean-review="0"><img
+            src="https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=180"
+            alt="Sarah Lama"><span><b>Sarah Lama</b><small>Small Business Owner</small></span></button>
+        <button type="button" class="clean-thumb" data-clean-review="1"><img
+            src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=180"
+            alt="David Shrestha"><span><b>David Shrestha</b><small>Support Manager</small></span></button>
+        <button type="button" class="clean-thumb" data-clean-review="2"><img
+            src="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=180"
+            alt="Michael Reed"><span><b>Michael Reed</b><small>Operations Lead</small></span></button>
+        <button type="button" class="clean-thumb" data-clean-review="3"><img
+            src="https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg?auto=compress&cs=tinysrgb&w=180"
+            alt="Anurodh Sapkota"><span><b>Anurodh Sapkota</b><small>Business Analyst</small></span></button>
+      </div>
+      <div class="clean-testimonial-controls"><button type="button" id="cleanReviewPrev">‹</button><button type="button"
+          id="cleanReviewNext">›</button></div>
+    </div>
+  </div>
+</section>
+<section class="section latest-articles-section">
+  <div class="container">
+    <div class="max-center"><span class="section-tag">// Latest Articles</span>
+      <h2>Customer support insights from AI InquiryX.</h2>
+      <p>Short reads on response quality, support workflows, automation, and digital customer communication.</p>
+    </div>
+    <div class="cards-3 content-card-grid">
+      <article class="card blog-card"><img
+          src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1200"
+          alt="Support workshop meeting">
+        <h3>How support teams build faster response habits</h3>
+        <p>Practical ways to reduce customer confusion and improve follow-up quality.</p><a class="card-link"
+          href="{{ url_for('blog') }}">Read article →</a>
+      </article>
+      <article class="card blog-card"><img
+          src="https://images.pexels.com/photos/7688336/pexels-photo-7688336.jpeg?auto=compress&cs=tinysrgb&w=1200"
+          alt="Analytics report on desk">
+        <h3>Why analytics matter in inquiry management</h3>
+        <p>Use volume, urgency, and completion data to improve service planning.</p><a class="card-link"
+          href="{{ url_for('blog') }}">Read article →</a>
+      </article>
+      <article class="card blog-card"><img
+          src="https://images.pexels.com/photos/5473955/pexels-photo-5473955.jpeg?auto=compress&cs=tinysrgb&w=1200"
+          alt="Secure login and cybersecurity">
+        <h3>Secure admin access for cleaner support workflows</h3>
+        <p>Protect customer records while giving your team the tools they need.</p><a class="card-link"
+          href="{{ url_for('blog') }}">Read article →</a>
+      </article>
+    </div>
+  </div>
+</section>
+{% endblock %}

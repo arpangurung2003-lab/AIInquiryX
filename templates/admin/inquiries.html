@@ -1,0 +1,130 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Inbox | AI InquiryX{% endblock %}
+{% block page_heading %}Inbox{% endblock %}
+{% block content %}
+<section class="page-control-hero inbox-hero">
+    <div>
+        <span class="admin-kicker">Inquiry management</span>
+        <h1>Inbox</h1>
+        <p>Search, filter, review, and use AI assistance. AI drafts are never sent automatically.</p>
+    </div>
+    <div class="hero-actions"><a class="btn btn-outline" href="{{ url_for('admin_export_excel') }}">Download Excel</a><a
+            class="btn btn-outline" href="{{ url_for('admin_export_pdf') }}">Download PDF</a><a class="btn btn-primary"
+            href="{{ url_for('submit_inquiry') }}">Create test inquiry</a></div>
+</section>
+
+<form class="admin-filter refined-filter" method="GET">
+    <label class="filter-search">
+        <span>Search</span>
+        <input name="search" value="{{ request.args.get('search','') }}"
+            placeholder="Name, email, phone, category, tracking ID">
+    </label>
+
+    <label>
+        <span>Status</span>
+        <select name="status">
+            <option value="">All Status</option>
+            {% for value in valid_statuses %}
+                <option value="{{ value }}" {{ 'selected' if request.args.get('status')==value else '' }}>
+                    {{ value }}
+                </option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <label>
+        <span>Priority</span>
+        <select name="priority">
+            <option value="">All Priority</option>
+            {% for value in ['Low','Normal','High','Urgent'] %}
+                <option value="{{ value }}" {{ 'selected' if request.args.get('priority')==value else '' }}>
+                    {{ value }}
+                </option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <label>
+        <span>Category</span>
+        <select name="category">
+            <option value="">All Category</option>
+            {% for value in ['General','Technical','Complaint','Billing','Feedback','Account'] %}
+                <option value="{{ value }}" {{ 'selected' if request.args.get('category')==value else '' }}>
+                    {{ value }}
+                </option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <button class="btn btn-primary">Filter</button>
+</form>
+
+<section class="admin-panel refined-panel">
+    <div class="admin-card-head">
+        <div><span class="admin-kicker">Tickets</span>
+            <h2>{{ inquiries|length }} inquiry records</h2>
+        </div>
+        <small class="ai-note">AI drafts stay private until an admin reviews and sends them.</small>
+    </div>
+    <div class="table-wrap refined-table-wrap">
+        <table class="refined-table">
+            <thead>
+                <tr>
+                    <th>Tracking ID</th>
+                    <th>Customer</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Category</th>
+                    <th>Subject</th>
+                    <th>Status</th>
+                    <th>Priority</th>
+                    <th>AI Tools</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in inquiries %}
+                <tr>
+                    <td data-label="Tracking ID"><strong>{{ item.tracking_id or ('#' ~ item.inquiry_id) }}</strong></td>
+                    <td data-label="Customer"><strong>{{ item.customer_name }}</strong></td>
+                    <td data-label="Email">{{ item.email }}</td>
+                    <td data-label="Phone">{{ item.phone or '-' }}</td>
+                    <td data-label="Category">{{ item.category }}</td>
+                    <td data-label="Subject">{{ item.subject }}</td>
+                    <td data-label="Status"><span class="badge status-{{ item.status|lower|replace(' ', '-') }}">{{
+                            item.status }}</span></td>
+                    <td data-label="Priority"><span class="badge priority-{{ item.priority|lower }}">{{ item.priority
+                            }}</span></td>
+                    <td data-label="AI Tools">
+                        <div class="mini-ai-actions refined-ai-actions">
+                            <button type="button" class="mini-ai-btn" data-ai-action="reply"
+                                data-url="{{ url_for('admin_ai_reply', inquiry_id=item.inquiry_id) }}">Reply</button>
+                            <button type="button" class="mini-ai-btn" data-ai-action="summary"
+                                data-url="{{ url_for('admin_ai_summarize', inquiry_id=item.inquiry_id) }}">Summary</button>
+                            <button type="button" class="mini-ai-btn" data-ai-action="classification"
+                                data-url="{{ url_for('admin_ai_classify', inquiry_id=item.inquiry_id) }}">Priority</button>
+                        </div>
+                    </td>
+                    <td data-label="Action"><a class="table-action-link"
+                            href="{{ url_for('admin_inquiry_detail', inquiry_id=item.inquiry_id) }}">View</a></td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="10">No inquiries match your filter.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+<div id="aiGlobalModal" class="ai-modal" hidden>
+    <div class="ai-modal-card refined-modal-card">
+        <button type="button" class="ai-modal-close" id="aiModalClose">×</button>
+        <span class="admin-kicker" id="aiModalType">AI result</span>
+        <h2>Review AI output</h2>
+        <p>Copy or edit this text before using it in a customer reply.</p>
+        <textarea id="aiModalText" class="ai-result-text"></textarea>
+        <button type="button" class="copy-ai-btn" id="copyAiModalBtn">Copy</button>
+    </div>
+</div>
+{% endblock %}

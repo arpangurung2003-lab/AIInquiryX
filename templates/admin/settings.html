@@ -1,0 +1,54 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Settings | AI InquiryX{% endblock %}
+{% block page_heading %}Settings{% endblock %}
+{% block content %}
+<div class="admin-title">
+  <h1>Admin Profile & Settings</h1>
+  <p>Manage profile, role, password, email testing, and SMS setup status.</p>
+</div>
+<section class="settings-grid-pro">
+  <article class="admin-card settings-card">
+    <h2>Profile</h2>
+    <p>{{ current_user.email }} · <b>{{ current_user.role }}</b></p>
+    <form method="POST" class="admin-detail-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <input type="hidden" name="action" value="profile">
+      <label>Name</label><input name="name" value="{{ current_user.name }}" required>
+      <label>Role</label>
+      <select name="role" {% if current_user.role !='Super Admin' %}disabled{% endif %}>
+        {% for role in ['Super Admin','Support Staff','Viewer'] %}<option {{ 'selected' if current_user.role==role
+          else '' }}>{{ role }}</option>{% endfor %}
+      </select>
+      <button class="btn btn-primary">Update Profile</button>
+    </form>
+  </article>
+  <article class="admin-card settings-card">
+    <h2>Change Password</h2>
+    <form method="POST" class="admin-detail-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <input type="hidden" name="action" value="password">
+      <label>Current Password</label>
+      <div class="pro-input-shell"><input id="settingsCurrentPassword" name="current_password" type="password"
+          required><button type="button" class="eye-toggle"
+          data-toggle-password="#settingsCurrentPassword">Show</button></div>
+      <label>New Password</label>
+      <div class="pro-input-shell"><input id="settingsNewPassword" name="new_password" type="password" required><button
+          type="button" class="eye-toggle" data-toggle-password="#settingsNewPassword">Show</button></div>
+      <button class="btn btn-primary">Change Password</button>
+    </form>
+  </article>
+  <article class="admin-card settings-card">
+    <h2>Email Setup Test</h2>
+    <div class="settings-summary">
+      {% for key, value in mail_summary.items() %}<p><span>{{ key }}</span><strong>{{ value or 'Not set' }}</strong></p>
+      {% endfor %}
+    </div>
+    <form method="POST" class="admin-detail-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <input type="hidden" name="action" value="email_test">
+      <label>Send test email to</label><input name="test_email" type="email" value="{{ current_user.email }}" required>
+      <button class="btn btn-primary">Send Test Email</button>
+    </form>
+  </article>
+</section>
+{% endblock %}

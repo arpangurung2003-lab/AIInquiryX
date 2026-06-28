@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <title>Admin Login | AI InquiryX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+
+<body class="admin-login-modern-body">
+  <main class="admin-login-modern-shell">
+    <section class="admin-login-modern-card">
+      <div class="admin-login-illustration-panel">
+        <a class="admin-login-brand" href="{{ url_for('home') }}"><span>AI</span><strong>InquiryX</strong></a>
+        <div class="admin-illustration-wrap admin-login-real-image" aria-hidden="true">
+          <img src="{{ url_for('static', filename='images/admin-login-security.avif') }}" alt="Secure admin login">
+        </div>
+        <h1>Admin control center</h1>
+        <p>Protected access for managing inquiries, customers, status updates, AI replies, and support workflow.</p>
+      </div>
+
+      <div class="admin-login-form-panel">
+        <span class="admin-login-pill">Protected admin portal</span>
+        <h2>Login</h2>
+        <p>Use your admin credentials to access the InquiryX dashboard.</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="auth-flashes">
+          {% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <form method="POST" data-loading-form class="modern-login-form">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <label class="floating-field">
+            <div class="modern-login-input">
+              <input type="email" name="email" placeholder=" " required>
+              <span class="floating-label">Admin email</span>
+            </div>
+          </label>
+
+          <label class="floating-field">
+            <div class="modern-login-input">
+              <input id="adminPassword" type="password" name="password" placeholder=" " required>
+              <span class="floating-label">Password</span>
+              <button class="eye-toggle" type="button" data-toggle-password="#adminPassword">Show</button>
+            </div>
+          </label>
+
+          <div class="modern-login-options">
+            <label><input type="checkbox" name="remember"> Remember me</label>
+            <a href="{{ url_for('forgot_password') }}">Forgot password?</a>
+          </div>
+
+          <button class="admin-auth-submit modern-login-submit" type="submit">Login</button>
+        </form>
+
+        <div class="admin-login-note">
+          <span>Admin access only.</span>
+          <a href="{{ url_for('home') }}">Back to website</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+
+</html>

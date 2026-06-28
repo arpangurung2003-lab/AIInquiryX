@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}My Inquiries | AI InquiryX{% endblock %}
+{% block content %}
+<section class="page-hero form-page-hero">
+  <div class="container"><span class="section-tag">// My Inquiries</span>
+    <h1>Customer dashboard</h1>
+    <p>Signed in as {{ customer_email }}. Review your submitted inquiries and latest responses.</p>
+    <div class="hero-actions"><a class="btn btn-primary" href="{{ url_for('submit_inquiry') }}">Submit another
+        inquiry</a><a class="btn btn-outline" href="{{ url_for('customer_logout') }}">Logout</a></div>
+  </div>
+</section>
+<section class="section">
+  <div class="container customer-dashboard-list">
+    {% for inquiry in inquiries %}
+    <article class="result-card enhanced-result-card portal-ticket-card">
+      <div class="result-head">
+        <h2>{{ inquiry.tracking_id }} — {{ inquiry.subject }}</h2><span
+          class="badge status-{{ inquiry.status|lower|replace(' ', '-') }}">{{ inquiry.status }}</span>
+      </div>
+      <div class="tracking-info-grid">
+        <p><b>Category:</b> {{ inquiry.category }}</p>
+        <p><b>Priority:</b> {{ inquiry.priority }}</p>
+        <p><b>Submitted:</b> {{ inquiry.created_at.strftime('%Y-%m-%d %H:%M') if inquiry.created_at else '-' }}</p>
+        <p><b>Updated:</b> {{ inquiry.updated_at.strftime('%Y-%m-%d %H:%M') if inquiry.updated_at else '-' }}</p>
+      </div>
+      <p><b>Message:</b><br>{{ inquiry.message }}</p>
+      <p><b>Admin reply:</b><br>{{ inquiry.admin_response or 'No admin reply yet. Our team is reviewing your inquiry.'
+        }}</p>
+      <div class="ticket-action-row"><a class="btn btn-outline"
+          href="{{ url_for('track_inquiry', tracking_id=inquiry.tracking_id) }}">Open tracking page</a>
+        {% if inquiry.status in ['Fixed','Completed','Closed'] %}
+        <form method="POST" action="{{ url_for('customer_reopen_inquiry', tracking_id=inquiry.tracking_id) }}"><input
+            type="hidden" name="csrf_token" value="{{ csrf_token }}"><button class="btn btn-soft">Reopen
+            inquiry</button></form>
+        {% endif %}
+      </div>
+    </article>
+    {% else %}
+    <article class="form-card">
+      <h2>No inquiries found</h2>
+      <p>Submit your first inquiry to start tracking support progress.</p><a class="btn btn-primary"
+        href="{{ url_for('submit_inquiry') }}">Submit Inquiry</a>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

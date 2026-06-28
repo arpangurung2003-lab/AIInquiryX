@@ -1,0 +1,39 @@
+# Secrets / environment
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# User uploaded files - keep folders only
+protected_uploads/*
+!protected_uploads/.gitkeep
+
+static/uploads/*
+!static/uploads/.gitkeep
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs and exports
+*.log
+exports/
+
+# Test / coverage artifacts
+.coverage
+htmlcov/
+coverage.xml

@@ -1,0 +1,106 @@
+CREATE TABLE IF NOT EXISTS admins (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(120) NOT NULL DEFAULT 'Administrator',
+  email VARCHAR(160) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  role VARCHAR(40) NOT NULL DEFAULT 'Super Admin',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS customers (
+  id SERIAL PRIMARY KEY,
+  full_name VARCHAR(140) NOT NULL,
+  email VARCHAR(160) NOT NULL,
+  phone VARCHAR(40),
+  company VARCHAR(140),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS inquiries (
+  inquiry_id SERIAL PRIMARY KEY,
+  tracking_id VARCHAR(24) UNIQUE NOT NULL,
+  customer_id INTEGER REFERENCES customers(id) ON DELETE SET NULL,
+  customer_name VARCHAR(140) NOT NULL,
+  email VARCHAR(160) NOT NULL,
+  phone VARCHAR(40),
+  contact_preference VARCHAR(20) DEFAULT 'Email',
+  category VARCHAR(80) DEFAULT 'General',
+  subject VARCHAR(220) NOT NULL,
+  message TEXT NOT NULL,
+  priority VARCHAR(30) DEFAULT 'Normal',
+  status VARCHAR(30) DEFAULT 'Pending',
+  admin_response TEXT,
+  attachment_filename VARCHAR(255),
+  attachment_original VARCHAR(255),
+  rating INTEGER,
+  rating_comment TEXT,
+  rated_at TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS responses (
+  id SERIAL PRIMARY KEY,
+  inquiry_id INTEGER NOT NULL REFERENCES inquiries(inquiry_id) ON DELETE CASCADE,
+  admin_id INTEGER REFERENCES admins(id) ON DELETE SET NULL,
+  response_text TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS notifications (
+  id SERIAL PRIMARY KEY,
+  inquiry_id INTEGER NOT NULL REFERENCES inquiries(inquiry_id) ON DELETE CASCADE,
+  email_sent BOOLEAN DEFAULT FALSE,
+  sms_prepared BOOLEAN DEFAULT FALSE,
+  notification_type VARCHAR(80) NOT NULL,
+  sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  error_message TEXT,
+  is_read BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE IF NOT EXISTS ai_chat_history (
+  id SERIAL PRIMARY KEY,
+  user_message TEXT NOT NULL,
+  assistant_reply TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS events (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(180) NOT NULL,
+  event_date DATE NOT NULL,
+  location VARCHAR(160) DEFAULT 'Online',
+  description TEXT NOT NULL,
+  status VARCHAR(30) DEFAULT 'Upcoming',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS contact_messages (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(140) NOT NULL,
+  email VARCHAR(160) NOT NULL,
+  phone VARCHAR(40),
+  company VARCHAR(140),
+  subject VARCHAR(220) NOT NULL,
+  message TEXT NOT NULL,
+  is_read BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS status_history (
+  id SERIAL PRIMARY KEY,
+  inquiry_id INTEGER NOT NULL REFERENCES inquiries(inquiry_id) ON DELETE CASCADE,
+  admin_id INTEGER REFERENCES admins(id) ON DELETE SET NULL,
+  old_status VARCHAR(40),
+  new_status VARCHAR(40) NOT NULL,
+  note TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS internal_notes (
+  id SERIAL PRIMARY KEY,
+  inquiry_id INTEGER NOT NULL REFERENCES inquiries(inquiry_id) ON DELETE CASCADE,
+  admin_id INTEGER REFERENCES admins(id) ON DELETE SET NULL,
+  note TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

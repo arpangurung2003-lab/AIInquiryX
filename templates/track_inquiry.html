@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Track Inquiry | AI InquiryX{% endblock %}
+{% block content %}
+<section class="page-hero form-page-hero track-page-hero">
+  <div class="container"><button class="back-btn" type="button" onclick="history.back()">← Back</button><span
+      class="section-tag">// Track Inquiry</span>
+    <h1>Check your support ticket status.</h1>
+    <p>Enter your tracking ID plus the email or phone number used on the inquiry. This keeps customer details private.
+    </p>
+  </div>
+</section>
+<section class="section">
+  <div class="container track-page-container">
+    <form class="form-card track-form pro-track-form" method="POST">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <input name="tracking_id" value="{{ prefill_tracking_id or "" }}" placeholder="Tracking ID, e.g. AIX-1A2B3C4D"
+        required>
+      <input name="identity" value="{{ prefill_identity or "" }}"
+        placeholder="Email address or phone number used on the inquiry" required>
+      <button class="btn btn-primary">Track Status →</button>
+    </form>
+    {% if inquiry %}
+    <article class="result-card enhanced-result-card">
+      <div class="result-head">
+        <h2>{{ inquiry.tracking_id or ('#' ~ inquiry.inquiry_id) }} — {{ inquiry.subject }}</h2><span
+          class="badge status-{{ inquiry.status|lower|replace(' ', '-') }}">{{ inquiry.status }}</span>
+      </div>
+      <div class="tracking-info-grid">
+        <p><b>Customer:</b> {{ inquiry.customer_name }}</p>
+        <p><b>Email:</b> {{ inquiry.email }}</p>
+        <p><b>Phone:</b> {{ inquiry.phone or 'Not provided' }}</p>
+        <p><b>Category:</b> {{ inquiry.category }}</p>
+        <p><b>Date submitted:</b> {{ inquiry.created_at.strftime('%Y-%m-%d %H:%M') if inquiry.created_at else '-' }}</p>
+        <p><b>Last updated:</b> {{ inquiry.updated_at.strftime('%Y-%m-%d %H:%M') if inquiry.updated_at else '-' }}</p>
+      </div>
+      <hr>
+      <p><b>Inquiry message:</b><br>{{ inquiry.message }}</p>
+      <p><b>Admin reply:</b><br>{{ inquiry.admin_response or 'No admin reply yet. Our team is reviewing your inquiry.'
+        }}</p>
+      {% if inquiry.status in ['Fixed','Completed'] %}
+      <div class="rating-card">
+        {% if inquiry.rating %}
+        <strong>Your rating: {{ inquiry.rating }}/5</strong>
+        {% if inquiry.rating_comment %}<p>{{ inquiry.rating_comment }}</p>{% endif %}
+        {% else %}
+        <h3>Rate this support experience</h3>
+        <form method="POST" action="{{ url_for('rate_inquiry', tracking_id=inquiry.tracking_id) }}" class="rating-form">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <select name="rating" required>
+            <option value="">Select rating</option>
+            <option value="5">★★★★★ Excellent</option>
+            <option value="4">★★★★ Good</option>
+            <option value="3">★★★ Average</option>
+            <option value="2">★★ Poor</option>
+            <option value="1">★ Very poor</option>
+          </select>
+          <textarea name="rating_comment" placeholder="Optional comment"></textarea>
+          <button class="btn btn-primary">Submit Rating</button>
+        </form>
+        {% endif %}
+      </div>
+      {% endif %}
+    </article>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
