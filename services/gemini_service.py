@@ -1,5 +1,3 @@
-"""Gemini + OpenAI + free local fallback AI helpers for AI InquiryX admin tools."""
-
 import json
 import os
 from pathlib import Path
